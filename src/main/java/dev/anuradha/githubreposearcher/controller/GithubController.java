@@ -16,7 +16,6 @@ import java.util.List;
 public class GithubController {
 
     private final GithubService githubService;
-    private final RepoRepository repoRepository;
 
     /**
      * Search GitHub repos and save them to the database
@@ -37,7 +36,6 @@ public class GithubController {
             @RequestParam(defaultValue = "stars") String sort){
 
         return githubService.getStoredRepos(language,minStars,sort);
-
     }
 
 }
