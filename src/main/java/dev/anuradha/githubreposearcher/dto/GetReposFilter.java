@@ -1,4 +1,4 @@
 package dev.anuradha.githubreposearcher.dto;
 
-public class RepositoryResponseDto {
+public class GetReposFilter {
 }

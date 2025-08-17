@@ -1,4 +1,4 @@
 package dev.anuradha.githubreposearcher.dto;
 
-public class SearchRequestDto {
+public class SearchRepoResponse {
 }

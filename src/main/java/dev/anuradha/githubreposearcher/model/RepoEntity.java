@@ -1,4 +1,5 @@
 package dev.anuradha.githubreposearcher.model;
 
-public class RepositoryEntity {
+public class RepoEntity {
+
 }

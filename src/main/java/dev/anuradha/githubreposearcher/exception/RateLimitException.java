@@ -1,4 +1,4 @@
 package dev.anuradha.githubreposearcher.exception;
 
-public class GitHubApiException {
+public class RateLimitException {
 }

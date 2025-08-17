@@ -1,4 +1,5 @@
 package dev.anuradha.githubreposearcher.exception;
 
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler
+{
 }
