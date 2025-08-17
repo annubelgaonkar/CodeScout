@@ -9,15 +9,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
 
+    @Value("${github.api.base-url}")
+    private String githubApiBaseUrl;
+
     @Bean
-    WebClient githubWebClient(
-            @Value("${github.base-url}") String baseUrl,
-            @Value("${github.token:}") String token) {
+    public WebClient githubWebClient(){
         return WebClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(HttpHeaders.ACCEPT, "application/vnd.github+json")
-                .defaultHeader(HttpHeaders.USER_AGENT, "github-searcher-app")
-                .defaultHeaders(h -> { if (!token.isBlank()) h.setBearerAuth(token); })
+                .baseUrl(githubApiBaseUrl)
+                .defaultHeader("Accept","application/vnd.github+json")
                 .build();
     }
+
 }
