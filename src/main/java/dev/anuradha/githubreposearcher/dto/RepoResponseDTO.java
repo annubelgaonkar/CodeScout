@@ -1,9 +1,6 @@
 package dev.anuradha.githubreposearcher.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 
@@ -11,6 +8,7 @@ import java.time.OffsetDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RepoResponseDTO {
     private Long id;
     private String name;
