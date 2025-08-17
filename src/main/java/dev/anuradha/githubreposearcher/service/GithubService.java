@@ -77,4 +77,51 @@ public class GithubService {
             throw new RuntimeException("GitHub API error: " + ex.getMessage(), ex);
         }
     }
+
+    public List<RepoResponseDTO> getStoredRepos(String language,
+                                                Integer minStars,
+                                                String sort){
+        List<RepoEntity> repos;
+
+        if(language != null && minStars != null){
+            repos = repoRepository.findByLanguageIgnoreCaseAndStarsGreaterThanEqual(language, minStars);
+        }
+        else if(language != null){
+            repos = repoRepository.findByLanguageIgnoreCase(language);
+        }
+        else if (minStars != null) {
+            repos = repoRepository.findByStarsGreaterThanEqual(minStars);
+        }
+        else {
+            repos = repoRepository.findAll();
+        }
+
+
+        repos = repos.stream()
+                .sorted((a, b) -> {
+                    switch (sort.toLowerCase()) {
+                        case "forks":
+                            return b.getForks().compareTo(a.getForks());
+                        case "updated":
+                            return b.getLastUpdated().compareTo(a.getLastUpdated());
+                        default:
+                            return b.getStars().compareTo(a.getStars());
+                    }
+                })
+                .collect(Collectors.toList());
+
+        // Map to DTO
+        return repos.stream()
+                .map(e -> RepoResponseDTO.builder()
+                        .id(e.getId())
+                        .name(e.getName())
+                        .description(e.getDescription())
+                        .ownerName(e.getOwnerName())
+                        .language(e.getLanguage())
+                        .stars(e.getStars())
+                        .forks(e.getForks())
+                        .lastUpdated(e.getLastUpdated())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
