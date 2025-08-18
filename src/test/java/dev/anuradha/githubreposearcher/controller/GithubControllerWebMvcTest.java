@@ -39,7 +39,7 @@ class GithubControllerWebMvcTest {
                 .id(1L)
                 .name("spring-boot-example")
                 .description("Demo repo")
-                .ownerName("user123")
+                .owner("user123")
                 .language("Java")
                 .stars(150)
                 .forks(30)
@@ -63,12 +63,12 @@ class GithubControllerWebMvcTest {
     @Test
     void testGetRepositories_returnsJsonResponse() throws Exception{
         RepoResponseDTO repo1 = RepoResponseDTO.builder()
-                .id(2L).name("Repo A").ownerName("ADB").language("Java")
+                .id(2L).name("Repo A").owner("ADB").language("Java")
                 .stars(500).forks(50).lastUpdated(OffsetDateTime.now())
                 .build();
 
         RepoResponseDTO repo2 = RepoResponseDTO.builder()
-                .id(3L).name("Repo B").ownerName("Bob").language("java")
+                .id(3L).name("Repo B").owner("Bob").language("java")
                 .stars(200).forks(20).lastUpdated(OffsetDateTime.now())
                 .build();
 

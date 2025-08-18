@@ -4,6 +4,7 @@ import dev.anuradha.githubreposearcher.dto.GithubApiResponseDTO;
 import dev.anuradha.githubreposearcher.dto.GithubSearchRequestDTO;
 import dev.anuradha.githubreposearcher.dto.RepoResponseDTO;
 import dev.anuradha.githubreposearcher.exception.GithubApiException;
+import dev.anuradha.githubreposearcher.exception.RateLimitException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -31,13 +32,18 @@ public class GithubApiClientImpl implements GithubApiClient{
                         .queryParam("sort", request.getSort()) // stars | forks | updated
                         .build())
                 .retrieve()
-                .onStatus(HttpStatusCode::isError, response ->
-                        response.bodyToMono(String.class)
-                                .flatMap(body -> Mono.error(
-                                        new GithubApiException("GitHub API error: " + body))))
-                .bodyToMono(GithubApiResponseDTO.class)
-                .block();
+                .onStatus(HttpStatusCode::isError, response ->{
+        if (response.statusCode().value() == 403 || response.statusCode().value() == 429) {
 
+            String retryAfter = response.headers().asHttpHeaders().getFirst("Retry-After");
+            long retryAfterSecs = retryAfter != null ? Long.parseLong(retryAfter) : 60;
+            return Mono.error(new RateLimitException("GitHub rate limit exceeded", retryAfterSecs));
+        }
+        return response.bodyToMono(String.class)
+                .flatMap(body -> Mono.error(new GithubApiException("GitHub API error: " + body)));
+    })
+            .bodyToMono(GithubApiResponseDTO.class)
+        .block();
         if (apiResponse == null || apiResponse.getItems() == null) {
             return List.of();
         }

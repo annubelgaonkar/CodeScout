@@ -30,6 +30,17 @@ public class GlobalExceptionHandler
         );
     }
 
+    @ExceptionHandler(RateLimitException.class)
+    public ResponseEntity<ApiErrorResponse> handleRateLimit(RateLimitException ex) {
+        ApiErrorResponse error = new ApiErrorResponse(
+                false,
+                "GitHub rate limit exceeded. Retry after " + ex.getRetryAfterSeconds() + " seconds",
+                429,
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(429).body(error);
+    }
+
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException ex) {

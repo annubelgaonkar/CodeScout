@@ -40,7 +40,7 @@ class GithubServiceTest {
                 .id(1L)
                 .name("spring-boot-example")
                 .description("Demo repo")
-                .ownerName("user123")
+                .owner("user123")
                 .language("Java")
                 .stars(200)
                 .forks(50)
@@ -61,7 +61,7 @@ class GithubServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size(), "Should return 1 repo");
         assertEquals("spring-boot-example", result.get(0).getName());
-        assertEquals("user123", result.get(0).getOwnerName());
+        assertEquals("user123", result.get(0).getOwner());
         assertEquals(200, result.get(0).getStars());
         assertEquals("Java", result.get(0).getLanguage());
     }
