@@ -75,7 +75,7 @@ class GithubControllerWebMvcTest {
         when(githubService.getStoredRepos("Java",100, "stars"))
                 .thenReturn(List.of(repo1, repo2));
 
-        mockMvc.perform(get("/github/repos")
+        mockMvc.perform(get("/github/repositories")
                 .param("language","Java")
                 .param("minStars","100")
                 .param("sort", "stars"))
@@ -90,7 +90,7 @@ class GithubControllerWebMvcTest {
         when(githubService.getStoredRepos("Python", 50, "stars"))
                 .thenReturn(List.of());
 
-        mockMvc.perform(get("/github/repos")
+        mockMvc.perform(get("/github/repositories")
                 .param("language","Python")
                 .param("minStars", "50")
                 .param("sort", "stars"))

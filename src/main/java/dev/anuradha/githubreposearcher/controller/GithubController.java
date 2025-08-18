@@ -34,7 +34,7 @@ public class GithubController {
      * Retrieve the stored repos with filters
      */
 
-    @GetMapping("/repos")
+    @GetMapping("/repositories")
     public List<RepoResponseDTO> getRepos(
             @RequestParam(required = false) String language,
             @RequestParam(required = false) Integer minStars,
