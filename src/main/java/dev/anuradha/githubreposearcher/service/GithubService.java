@@ -1,12 +1,14 @@
 package dev.anuradha.githubreposearcher.service;
 
+import dev.anuradha.githubreposearcher.client.GithubApiClient;
 import dev.anuradha.githubreposearcher.dto.*;
+import dev.anuradha.githubreposearcher.exception.GithubApiException;
+import dev.anuradha.githubreposearcher.exception.InvalidRequestException;
 import dev.anuradha.githubreposearcher.model.RepoEntity;
 import dev.anuradha.githubreposearcher.repository.RepoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -18,63 +20,66 @@ public class GithubService {
 
     private final WebClient githubWebClient;
     private final RepoRepository repoRepository;
+    private final GithubApiClient githubApiClient;
 
     /**
      * Fetch repos from GitHub API and save/update in DB
      */
 
     public List<RepoResponseDTO> searchAndSaveRepos(GithubSearchRequestDTO requestDTO){
-        try{
-            //build query
-            StringBuilder queryBuilder = new StringBuilder(requestDTO.getQuery());
-            if(requestDTO.getLanguage() != null && !requestDTO.getLanguage().isEmpty()){
-                queryBuilder.append("+language:").append(requestDTO.getLanguage());
-            }
 
-            //call GitHub API
-            GithubApiResponseDTO apiResponseDTO = githubWebClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .queryParam("q", queryBuilder.toString())
-                            .queryParam("sort", requestDTO.getSort() != null ? requestDTO.getSort() : "stars")
-                            .build())
-                    .retrieve()
-                    .bodyToMono(GithubApiResponseDTO.class)
-                    .block();
+        // Get repos from GitHub API
+        List<RepoResponseDTO> reposFromApi = githubApiClient.searchRepositories(requestDTO);
 
-            if(apiResponseDTO == null || apiResponseDTO.getItems() == null){
-                return List.of();
-            }
-
-            //Map and save / update to database
-            List<RepoEntity> entities = apiResponseDTO.getItems().stream()
-                    .map(item -> RepoEntity.builder()
-                            .id(item.getId())
-                            .name(item.getName())
-                            .description(item.getDescription())
-                            .ownerName(item.getOwner().getLogin())
-                            .language(item.getLanguage())
-                            .stars(item.getStars())
-                            .forks(item.getForks())
-                            .lastUpdated(item.getLastUpdated())
-                            .build())
-                    .collect(Collectors.toList());
-
-            //Save all or update if already exists
-            repoRepository.saveAll(entities);
-
-            return mapToResponse(entities);
-
-        } catch (WebClientResponseException ex){
-            throw new RuntimeException("GitHub API error: " + ex.getMessage(), ex);
-        }
+        // Map, save, and map back to DTO
+        return reposFromApi.stream()
+                .map(this::mapToEntity)
+                .map(repoRepository::save)   // save returns the saved entity
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
+    // Convert DTO to Entity
+    private RepoEntity mapToEntity(RepoResponseDTO dto) {
+        if (dto == null) return null;
+
+        RepoEntity entity = new RepoEntity();
+        entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setOwnerName(dto.getOwnerName());
+        entity.setLanguage(dto.getLanguage());
+        entity.setStars(dto.getStars());
+        entity.setForks(dto.getForks());
+        entity.setLastUpdated(dto.getLastUpdated());
+        return entity;
+    }
+    // Convert Entity back to DTO
+    private RepoResponseDTO mapToDto(RepoEntity entity) {
+        if (entity == null) return null;
+
+        return RepoResponseDTO.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .ownerName(entity.getOwnerName())
+                .language(entity.getLanguage())
+                .stars(entity.getStars())
+                .forks(entity.getForks())
+                .lastUpdated(entity.getLastUpdated())
+                .build();
+        }
+
 
 
     // Retrieve repos from DB with optional filters & sorting
-
     public List<RepoResponseDTO> getStoredRepos(String language,
                                                 Integer minStars,
                                                 String sort){
+
+        if (minStars != null && minStars < 0) {
+            throw new InvalidRequestException("minStars must be non-negative");
+        }
+
         List<RepoEntity> repos;
 
         if(language != null && minStars != null){

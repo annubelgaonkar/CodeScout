@@ -22,6 +22,7 @@ public class GithubApiResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class RepoItem{
         private Long id;
         private String name;

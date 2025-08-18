@@ -1,5 +1,6 @@
 package dev.anuradha.githubreposearcher.exception;
 
+import dev.anuradha.githubreposearcher.dto.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,23 +12,36 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler
 {
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex){
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidRequest(InvalidRequestException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                Map.of(
-                        "timestamp", LocalDateTime.now(),
-                        "error", ex.getMessage()
-                )
+                new ApiErrorResponse(false,
+                        ex.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDateTime.now())
+        );
+    }
+
+    @ExceptionHandler(GithubApiException.class)
+    public ResponseEntity<ApiErrorResponse> handleGithubApiError(GithubApiException ex){
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ApiErrorResponse(
+                false,
+                ex.getMessage(),
+                HttpStatus.BAD_GATEWAY.value(),
+                LocalDateTime.now())
+        );
+    }
+
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new ApiErrorResponse(false, ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), LocalDateTime.now())
         );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> hanldeGenericException(Exception ex){
+    public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                Map.of(
-                        "timestamp",LocalDateTime.now(),
-                        "error", "Unexpected error occurred"
-                )
+                new ApiErrorResponse(false, "Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value(), LocalDateTime.now())
         );
     }
 }

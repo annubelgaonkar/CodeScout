@@ -2,8 +2,6 @@ package dev.anuradha.githubreposearcher.controller;
 
 import dev.anuradha.githubreposearcher.dto.GithubSearchRequestDTO;
 import dev.anuradha.githubreposearcher.dto.RepoResponseDTO;
-import dev.anuradha.githubreposearcher.model.RepoEntity;
-import dev.anuradha.githubreposearcher.repository.RepoRepository;
 import dev.anuradha.githubreposearcher.service.GithubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
