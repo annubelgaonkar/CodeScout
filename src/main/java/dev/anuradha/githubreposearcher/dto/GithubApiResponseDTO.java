@@ -1,10 +1,8 @@
 package dev.anuradha.githubreposearcher.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.List;
 import java.time.OffsetDateTime;
 
@@ -12,6 +10,7 @@ import java.time.OffsetDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class GithubApiResponseDTO {
 
     @JsonProperty("total_count")
