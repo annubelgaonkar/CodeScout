@@ -13,7 +13,7 @@ public class RepoResponseDTO {
     private Long id;
     private String name;
     private String description;
-    private String ownerName;
+    private String owner;
     private String language;
     private Integer stars;
     private Integer forks;

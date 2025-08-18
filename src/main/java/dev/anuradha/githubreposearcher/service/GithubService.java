@@ -46,7 +46,7 @@ public class GithubService {
         entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
-        entity.setOwnerName(dto.getOwnerName());
+        entity.setOwnerName(dto.getOwner());
         entity.setLanguage(dto.getLanguage());
         entity.setStars(dto.getStars());
         entity.setForks(dto.getForks());
@@ -61,7 +61,7 @@ public class GithubService {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
-                .ownerName(entity.getOwnerName())
+                .owner(entity.getOwnerName())
                 .language(entity.getLanguage())
                 .stars(entity.getStars())
                 .forks(entity.getForks())
@@ -121,7 +121,7 @@ public class GithubService {
                 .id(e.getId())
                 .name(e.getName())
                 .description(e.getDescription())
-                .ownerName(e.getOwnerName())
+                .owner(e.getOwnerName())
                 .language(e.getLanguage())
                 .stars(e.getStars())
                 .forks(e.getForks())

@@ -2,8 +2,10 @@ package dev.anuradha.githubreposearcher.controller;
 
 import dev.anuradha.githubreposearcher.dto.GithubSearchRequestDTO;
 import dev.anuradha.githubreposearcher.dto.RepoResponseDTO;
+import dev.anuradha.githubreposearcher.dto.SearchResponseDTO;
 import dev.anuradha.githubreposearcher.service.GithubService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,13 @@ public class GithubController {
      * Search GitHub repos and save them to the database
      */
     @PostMapping("/search")
-    public List<RepoResponseDTO> searchRepos(@RequestBody GithubSearchRequestDTO requestDTO){
-        return githubService.searchAndSaveRepos(requestDTO);
+    public ResponseEntity<SearchResponseDTO> searchRepos(
+            @RequestBody GithubSearchRequestDTO requestDTO){
+       List<RepoResponseDTO> repos = githubService.searchAndSaveRepos(requestDTO);
+       return ResponseEntity.ok(new SearchResponseDTO(
+               "Repositories fetched and saved successfully",
+               repos
+       ));
     }
 
     /**

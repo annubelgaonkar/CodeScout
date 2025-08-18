@@ -15,7 +15,6 @@ import java.time.OffsetDateTime;
 public class RepoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
