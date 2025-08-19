@@ -2,7 +2,6 @@ package dev.anuradha.githubreposearcher.service;
 
 import dev.anuradha.githubreposearcher.client.GithubApiClient;
 import dev.anuradha.githubreposearcher.dto.*;
-import dev.anuradha.githubreposearcher.exception.GithubApiException;
 import dev.anuradha.githubreposearcher.exception.InvalidRequestException;
 import dev.anuradha.githubreposearcher.model.RepoEntity;
 import dev.anuradha.githubreposearcher.repository.RepoRepository;
@@ -83,7 +82,8 @@ public class GithubService {
         List<RepoEntity> repos;
 
         if(language != null && minStars != null){
-            repos = repoRepository.findByLanguageIgnoreCaseAndStarsGreaterThanEqual(language, minStars);
+            repos = repoRepository.findByLanguageIgnoreCaseAndStarsGreaterThanEqual(
+                    language, minStars);
         }
         else if(language != null){
             repos = repoRepository.findByLanguageIgnoreCase(language);

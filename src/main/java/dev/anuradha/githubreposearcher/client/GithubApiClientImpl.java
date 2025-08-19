@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class GithubApiClientImpl implements GithubApiClient{
+
     private final WebClient githubWebClient;
 
     @Override

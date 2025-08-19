@@ -102,4 +102,4 @@ java -jar target/github-repo-searcher-0.0.1-SNAPSHOT.jar
 http://localhost:8080/swagger-ui/index.html
 
 👤 Author
-Anuradha B — Backend Developer (Java, Spring Boot, Microservices)
+Anuradha Belgaonkar — Backend Developer (Java, Spring Boot, Microservices)

@@ -1,7 +1,6 @@
 package dev.anuradha.githubreposearcher.dto;
 
 import lombok.*;
-
 import java.time.OffsetDateTime;
 
 @Setter

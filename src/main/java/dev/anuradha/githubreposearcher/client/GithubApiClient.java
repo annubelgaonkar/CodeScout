@@ -1,6 +1,5 @@
 package dev.anuradha.githubreposearcher.client;
 
-
 import dev.anuradha.githubreposearcher.dto.GithubSearchRequestDTO;
 import dev.anuradha.githubreposearcher.dto.RepoResponseDTO;
 

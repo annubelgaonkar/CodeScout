@@ -2,7 +2,6 @@ package dev.anuradha.githubreposearcher.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.OffsetDateTime;
 
 @Entity

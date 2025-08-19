@@ -56,8 +56,8 @@ class GithubControllerWebMvcTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("spring-boot-example"))
-                .andExpect(jsonPath("$[0].stars").value(150));
+                .andExpect(jsonPath("$.repositories[0].name").value("spring-boot-example"))
+                .andExpect(jsonPath("$.repositories[0].stars").value(150));
     }
 
     @Test
