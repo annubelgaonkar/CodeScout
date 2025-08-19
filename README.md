@@ -135,8 +135,6 @@ docker run --name pg-grs -e POSTGRES_USER=grs -e POSTGRES_PASSWORD=grs -e POSTGR
 ./mvnw clean package
 java -jar target/github-repo-searcher-0.0.1-SNAPSHOT.jar
 ```
-### Swagger UI
-http://localhost:8080/swagger-ui/index.html
 
-👤 Author
+👤 Author\
 Anuradha Belgaonkar — Backend Developer (Java, Spring Boot, Microservices)
