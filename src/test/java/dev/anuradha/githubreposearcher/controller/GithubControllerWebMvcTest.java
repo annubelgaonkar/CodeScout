@@ -52,7 +52,7 @@ class GithubControllerWebMvcTest {
         GithubSearchRequestDTO request = new GithubSearchRequestDTO(
                 "spring boot","java", "stars");
 
-        mockMvc.perform(post("/github/search")
+        mockMvc.perform(post("/api/github/search")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
@@ -75,7 +75,7 @@ class GithubControllerWebMvcTest {
         when(githubService.getStoredRepos("Java",100, "stars"))
                 .thenReturn(List.of(repo1, repo2));
 
-        mockMvc.perform(get("/github/repositories")
+        mockMvc.perform(get("/api/github/repositories")
                 .param("language","Java")
                 .param("minStars","100")
                 .param("sort", "stars"))
@@ -90,7 +90,7 @@ class GithubControllerWebMvcTest {
         when(githubService.getStoredRepos("Python", 50, "stars"))
                 .thenReturn(List.of());
 
-        mockMvc.perform(get("/github/repositories")
+        mockMvc.perform(get("/api/github/repositories")
                 .param("language","Python")
                 .param("minStars", "50")
                 .param("sort", "stars"))

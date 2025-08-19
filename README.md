@@ -2,6 +2,28 @@
 
 A Spring Boot service that fetches repositories from the GitHub API, stores them in PostgreSQL, and provides endpoints to query them with filters and sorting.
 
+
+---
+⚡ Features
+
+🔎 Search GitHub repositories by keyword and language
+
+💾 Store repositories in a relational database
+
+📂 Retrieve stored repositories with filters:
+
+- Language
+
+- Minimum Stars
+
+- Sort by: stars, forks, updated
+
+🚨 Error handling with clear JSON responses (rate limits, invalid requests)
+
+✅ Tests included for controllers and services
+
+
+
 ---
 
 ## 🚀 Tech Stack
@@ -12,34 +34,39 @@ A Spring Boot service that fetches repositories from the GitHub API, stores them
 - WebClient (for GitHub API calls)
 - Global Exception Handling
 - JUnit 5 & Mockito for testing
-- Swagger / OpenAPI for documentation
 
 ---
 
-## 📂 Project Structure
+## ▶️ Getting Started
+1. Clone and Build
 ```
-src/main/java/dev/anuradha/githubreposearcher/
-├── controller/ # REST Controllers
-├── service/ # Business logic
-├── repository/ # JPA Repositories
-├── model/ # Entities
-├── dto/ # DTOs for request/response
-├── client/ # GitHub API client
-├── config/ # WebClient config
-└── exception/ # Exception handling
+git clone https://github.com/annubelgaonkar/GithubRepoSearcher.git
+cd GithubRepoSearcher
+mvn clean package
 ```
----
+2. Run
+```
+mvn spring-boot:run
+```
+Or run the built JAR:
+```
+java -jar target/github-repo-searcher-0.0.1-SNAPSHOT.jar
 
+```
+
+The service starts on:
+👉 http://localhost:8080
+---
 ## ⚡ Endpoints
 
-### 1. Fetch and store repositories
-**POST** `/github/search`
+### 1. Search GitHub Repositories
+**POST** `/api/github/search`
 
 **Request body:**
 ```json
 {
   "query": "spring boot",
-  "language": "Java",
+  "language": "java",
   "sort": "stars"
 }
 ```
@@ -64,7 +91,7 @@ src/main/java/dev/anuradha/githubreposearcher/
 ```
 
 ### 2. Get stored repositories
-**GET** `/github/repositories?language=Java&minStars=100&sort=stars`
+**GET** `/api/github/repositories?language=Java&minStars=100&sort=stars`
 
 **Response:**
 ```json
@@ -73,6 +100,7 @@ src/main/java/dev/anuradha/githubreposearcher/
     {
       "id": 123,
       "name": "spring-boot",
+      "description": "This is an example repository",
       "owner": "spring-projects",
       "language": "Java",
       "stars": 67000,
@@ -82,12 +110,21 @@ src/main/java/dev/anuradha/githubreposearcher/
   ]
 }
 ```
+### 3. Example Error Response (Rate Limit)
+```
+{
+  "success": false,
+  "message": "GitHub rate limit exceeded. Retry after 60 seconds",
+  "status": 429,
+  "timestamp": "2024-08-19T11:00:00"
+}
+
+```
 ### 🛠️ Setup & Run
 ### Prerequisites
 
-- JDK 21+
+- JDK 17/21
 - Maven 3.9+
-- Docker (for PostgreSQL)
 
 ### Run PostgreSQL
 ```bash

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/github")
+@RequestMapping("/api/github")
 @RequiredArgsConstructor
 public class GithubController {
 
