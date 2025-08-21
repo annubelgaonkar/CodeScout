@@ -95,6 +95,11 @@ public class GithubService {
             repos = repoRepository.findAll();
         }
 
+        //  if user asked for language that doesn’t exist in DB
+        if (language != null && repos.isEmpty()) {
+            throw new InvalidRequestException("No repositories found for language: " + language);
+        }
+
         Comparator<RepoEntity> comparator;
         switch (sort.toLowerCase()) {
             case "forks":
