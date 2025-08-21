@@ -16,6 +16,7 @@ public interface RepoRepository extends JpaRepository<RepoEntity, Long> {
     List<RepoEntity> findByStarsGreaterThanEqual(Integer stars);
 
     // Find by language + stars
-    List<RepoEntity> findByLanguageIgnoreCaseAndStarsGreaterThanEqual(String language,
-                                                                            Integer stars);
+    List<RepoEntity> findByLanguageIgnoreCaseAndStarsGreaterThanEqual(
+            String language,
+            Integer stars);
 }

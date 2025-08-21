@@ -36,12 +36,15 @@ public class GithubApiClientImpl implements GithubApiClient{
                 .onStatus(HttpStatusCode::isError, response ->{
         if (response.statusCode().value() == 403 || response.statusCode().value() == 429) {
 
-            String retryAfter = response.headers().asHttpHeaders().getFirst("Retry-After");
+            String retryAfter = response.headers().asHttpHeaders().getFirst(
+                    "Retry-After");
             long retryAfterSecs = retryAfter != null ? Long.parseLong(retryAfter) : 60;
-            return Mono.error(new RateLimitException("GitHub rate limit exceeded", retryAfterSecs));
+            return Mono.error(new RateLimitException(
+                    "GitHub rate limit exceeded", retryAfterSecs));
         }
         return response.bodyToMono(String.class)
-                .flatMap(body -> Mono.error(new GithubApiException("GitHub API error: " + body)));
+                .flatMap(body -> Mono.error(new GithubApiException(
+                        "GitHub API error: " + body)));
     })
             .bodyToMono(GithubApiResponseDTO.class)
         .block();
