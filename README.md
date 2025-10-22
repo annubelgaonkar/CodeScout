@@ -1,4 +1,4 @@
-# 📚 GitHub Repository Searcher
+# 📚 CodeScout
 
 A Spring Boot backend service that integrates with the GitHub API to search repositories, persist them locally, and expose APIs for querying stored repositories with filters and sorting.
 
